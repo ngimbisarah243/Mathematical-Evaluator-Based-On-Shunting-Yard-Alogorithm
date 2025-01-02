@@ -3,8 +3,11 @@ package org.example
 import java.util.Stack
 
 fun main() {
-    val infix = "(((50/2)+(7*3))−(20/4))+((60−18)/6)" // = 42 (The answer of everything hihi)  // geht nicht ahhh
-   // val infix= "2-2*3"   // funktioniert
+
+    // I need an expression that eqauls 42 ahhhh...but
+    // ChatGPT is not able generating mathematic expressions that returns
+    // the right number
+    val infix = "(8+4)*(5-2)+ (10/2)*3+6-2" 
     val postfix = parseIntoPostfix(infix)
     println(postfix)
     println(postfixCalculatorAlgorithm(postfix))
@@ -27,9 +30,16 @@ fun parseIntoPostfix(expression: String): ArrayDeque<String> {
                 while (symbolStack.isNotEmpty() && symbolStack.peek() != '(') {
                     postfix.add(symbolStack.pop().toString())
                 }
-                while (symbolStack.isNotEmpty()) {
+            /*    while (symbolStack.isNotEmpty()) {
                     symbolStack.pop()  // Remove opening parenthesis
+                }*/
+
+                // Remove opening parenthesis
+                while(symbolStack.isNotEmpty()&&symbolStack.peek()=='('){
+
+                    symbolStack.pop()
                 }
+
             }
 
             '(' -> {
