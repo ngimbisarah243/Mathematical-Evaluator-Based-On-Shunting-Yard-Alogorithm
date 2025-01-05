@@ -4,13 +4,16 @@ import java.util.Stack
 
 fun main() {
 
-    // I need an expression that eqauls 42 ahhhh...but
-    // ChatGPT is not able generating mathematic expressions that returns
-    // the right number
-    val infix = "(8+4)*(5-2)+ (10/2)*3+6-2" 
+   // The answer of everything hihi
+    val infix = "(((((((7+5)*3)-(6*2))/8)-19)*2-2)/4)+50+1/2"
+
+    // Convert the infix expression to postfix notation
     val postfix = parseIntoPostfix(infix)
-    println(postfix)
-    println(postfixCalculatorAlgorithm(postfix))
+    println("Postfix notation: $postfix")
+
+    // Evaluation of the postfix expression
+    val result = postfixCalculatorAlgorithm(postfix)
+    println("Result = $result")
 }
 
 fun parseIntoPostfix(expression: String): ArrayDeque<String> {
@@ -23,6 +26,7 @@ fun parseIntoPostfix(expression: String): ArrayDeque<String> {
         '/' to 2    // high priority
     )
 
+    // Helper function to handle operators and parentheses
     fun addValueToStack(character: Char) {
         when (character) {
             ')' -> {
@@ -30,9 +34,6 @@ fun parseIntoPostfix(expression: String): ArrayDeque<String> {
                 while (symbolStack.isNotEmpty() && symbolStack.peek() != '(') {
                     postfix.add(symbolStack.pop().toString())
                 }
-            /*    while (symbolStack.isNotEmpty()) {
-                    symbolStack.pop()  // Remove opening parenthesis
-                }*/
 
                 // Remove opening parenthesis
                 while(symbolStack.isNotEmpty()&&symbolStack.peek()=='('){
@@ -58,18 +59,18 @@ fun parseIntoPostfix(expression: String): ArrayDeque<String> {
         }
     }
 
-    var numberBuffer = StringBuilder() // StringBuilder für mehrstellige Zahlen
+    var numberBuffer = StringBuilder() // Buffer to handle multi-digit numbers
 
     for (character in expression) {
         if (character.isWhitespace()) continue
 
         if (character.isDigit()) {
-            numberBuffer.append(character)  // Ziffer zur Zahl hinzufügen
+            numberBuffer.append(character)  // Append digit to the current number buffer
             //  postfix.add(character)
         } else {
 
             if (numberBuffer.isNotEmpty()) {
-                // Wenn eine Zahl vollständig ist, diese zum Postfix-Ausdruck hinzufügen
+                //  If a complete number is found, add it to the postfix expression
                 postfix.add(numberBuffer.toString())
                 numberBuffer = StringBuilder() // zurücksetzen
             }
@@ -103,17 +104,16 @@ fun postfixCalculatorAlgorithm(tokens: ArrayDeque<String>): Int {
             val num1 = numberStack.pop()
             val num2 = numberStack.pop()
 
-            when (token) {
-                "+" -> temp = num2 + num1
-                "-" -> temp = num2 - num1
-                "*" -> temp = num2 * num1
-                "/" -> temp = num2 / num1
+          result=  when (token) {
+                "+" -> num2 + num1
+                "-" -> num2 - num1
+                "*" ->  num2 * num1
+                "/" ->  num2 / num1
+              else -> throw IllegalArgumentException("Unknown operator: $token")
             }
-            numberStack.push(temp)
-            println(temp)
+            numberStack.push(result)
         }
     }
-    result = numberStack.pop()  //nur ein Wert ist drinnen
-
-    return result
+   // The final result will be the only number in the stack..
+    return numberStack.pop()
 }
